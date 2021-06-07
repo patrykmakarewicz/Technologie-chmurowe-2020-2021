@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mymongo-deployment
+  labels:
+    app: mymongo
+    type: db
+
+spec:
+  template:
+    metadata:
+      name: mymongo-pod
+      labels:
+        app: mymongo
+        type: db
+    spec: 
+      containers:
+        - name: mymongo-container
+          image: mongo:latest
+          volumeMounts: 
+            - mountPath: /data/db
+              name: volume
+              subPath: mongodb
+          env: 
+            - name: MONGO_DB
+              valueFrom: 
+                configMapKeyRef:
+                  name: mymongo-config
+                  key: MONGODATABASE
+      volumes: 
+        - name: volume
+          persistentVolumeClaim: 
+            claimName: mongo-pvc
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: mymongo
+      type: db
