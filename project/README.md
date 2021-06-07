@@ -25,7 +25,7 @@ In main directory:
 kubectl apply -f ./
 ```
 
-Now app is accessable through
+Now app is accessible through
 ```bash
 localhost
 ```
